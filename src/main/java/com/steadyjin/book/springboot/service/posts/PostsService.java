@@ -2,13 +2,16 @@ package com.steadyjin.book.springboot.service.posts;
 
 import com.steadyjin.book.springboot.domain.posts.Posts;
 import com.steadyjin.book.springboot.domain.posts.PostsRepository;
+import com.steadyjin.book.springboot.web.dto.PostsListResponseDto;
 import com.steadyjin.book.springboot.web.dto.PostsResponseDto;
 import com.steadyjin.book.springboot.web.dto.PostsSaveRequestDto;
 import com.steadyjin.book.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -36,4 +39,12 @@ public class PostsService {
 
         return new PostsResponseDto(entity);
     }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 }
